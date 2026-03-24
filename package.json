@@ -1,0 +1,30 @@
+{
+  "name": "xanhenhalog",
+  "version": "1.0.0",
+  "description": "Api de delivery de encomendas",
+  "homepage": "https://github.com/tjbarbosadev/delivery#readme",
+  "bugs": {
+    "url": "https://github.com/tjbarbosadev/delivery/issues"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjbarbosadev/delivery.git"
+  },
+  "license": "ISC",
+  "author": "Thiago Barbosa",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.22.1",
+    "express-async-errors": "^3.1.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}
