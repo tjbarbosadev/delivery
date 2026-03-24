@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express';
 import z from 'zod';
 import { hash } from 'bcrypt';
+import { prisma } from '@/database/prisma';
+import { AppError } from '@/utils/AppError';
 
 class UsersController {
   index(req: Request, res: Response) {
@@ -16,12 +18,25 @@ class UsersController {
 
     const { name, email, password } = bodySchema.parse(req.body);
 
+    const userWithEmail = await prisma.user.findFirst({ where: { email } });
+
+    if (userWithEmail) {
+      throw new AppError('Email already in use', 400);
+    }
+
     const hashedPassword = await hash(password, 10);
 
-    return res.json({
-      message: 'User created',
-      data: { name, email },
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
     });
+
+    const { password: _, ...userWithoutPassword } = user;
+
+    return res.json({ userWithoutPassword });
   }
 }
 
