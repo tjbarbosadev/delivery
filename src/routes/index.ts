@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
-const routes = Router();
-
 import { usersRoutes } from './usersRoutes';
+import { sessionsRoutes } from './sessionRoutes';
 
+const routes = Router();
 routes.use('/users', usersRoutes);
+routes.use('/sessions', sessionsRoutes);
 
 export { routes };
