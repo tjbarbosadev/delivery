@@ -36,7 +36,7 @@ class UsersController {
 
     const { password: _, ...userWithoutPassword } = user;
 
-    return res.json({ userWithoutPassword });
+    return res.status(201).json({ userWithoutPassword });
   }
 }
 
