@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import type { SignOptions } from 'jsonwebtoken';
 
 type AuthConfig = {
@@ -9,7 +10,7 @@ type AuthConfig = {
 
 export const authConfig: AuthConfig = {
   jwt: {
-    secret: process.env.JWT_SECRET,
+    secret: env.JWT_SECRET,
     expiresIn: '1d',
   },
 };

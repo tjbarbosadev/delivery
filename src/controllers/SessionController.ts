@@ -34,7 +34,9 @@ class SessionsController {
       expiresIn,
     });
 
-    return res.json({ token });
+    const { password: hashedPassword, ...userWithoutPassword } = user;
+
+    return res.json({ token, user: userWithoutPassword });
   }
 }
 
