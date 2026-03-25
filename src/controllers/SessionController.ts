@@ -1,7 +1,9 @@
+import { authConfig } from '@/configs/auth';
 import { prisma } from '@/database/prisma';
 import { AppError } from '@/utils/AppError';
 import { compare } from 'bcrypt';
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import z from 'zod';
 
 class SessionsController {
@@ -25,10 +27,14 @@ class SessionsController {
       throw new AppError('Invalid credentials', 401);
     }
 
-    return res.json({
-      message: 'Session created',
-      user: { id: user.id, name: user.name, email: user.email },
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = jwt.sign({ role: user.role }, secret as string, {
+      subject: user.id,
+      expiresIn,
     });
+
+    return res.json({ token });
   }
 }
 
