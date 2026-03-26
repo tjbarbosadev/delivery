@@ -1,8 +1,9 @@
 import { AppError } from '@/utils/AppError';
 import { Request, Response, NextFunction } from 'express';
-import { tr } from 'zod/v4/locales';
 
-function verifyUserRole(allowedRoles: string[]) {
+type AllowedRoles = 'sale' | 'customer';
+
+function verifyUserRole(allowedRoles: AllowedRoles[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
       throw new AppError('User not authenticated', 401);
