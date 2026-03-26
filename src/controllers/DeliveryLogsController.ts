@@ -4,16 +4,37 @@ import { Request, Response } from 'express';
 import z from 'zod';
 
 class DeliveryLogsController {
+  async index(req: Request, res: Response) {
+    const paramsSchema = z.object({
+      deliveryId: z.string().uuid(),
+    });
+
+    const { deliveryId } = paramsSchema.parse(req.params);
+
+    const delivery = await prisma.delivery.findUnique({
+      where: { id: deliveryId },
+      include: {
+        logs: true,
+      },
+    });
+
+    if (req.user.id !== delivery?.userId && req.user.role === 'customer') {
+      throw new AppError('The user can only view their own delivery logs', 401);
+    }
+
+    res.json({ deliveryLogs: delivery?.logs || [] });
+  }
+
   async create(req: Request, res: Response) {
     const bodySchema = z.object({
-      delivery_id: z.string().uuid(),
+      deliveryId: z.string().uuid(),
       description: z.string().max(255),
     });
 
-    const { delivery_id, description } = bodySchema.parse(req.body);
+    const { deliveryId, description } = bodySchema.parse(req.body);
 
     const delivery = await prisma.delivery.findUnique({
-      where: { id: delivery_id },
+      where: { id: deliveryId },
     });
 
     if (!delivery) {
@@ -29,7 +50,7 @@ class DeliveryLogsController {
 
     await prisma.deliveryLog.create({
       data: {
-        deliveryId: delivery_id,
+        deliveryId,
         description,
       },
     });
