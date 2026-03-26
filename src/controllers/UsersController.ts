@@ -14,9 +14,10 @@ class UsersController {
       name: z.string().trim().min(3),
       email: z.string().email(),
       password: z.string().min(6),
+      role: z.enum(['customer', 'sale']).optional(),
     });
 
-    const { name, email, password } = bodySchema.parse(req.body);
+    const { name, email, password, role } = bodySchema.parse(req.body);
 
     const userWithEmail = await prisma.user.findFirst({ where: { email } });
 
@@ -31,6 +32,7 @@ class UsersController {
         name,
         email,
         password: hashedPassword,
+        role: role || 'customer',
       },
     });
 

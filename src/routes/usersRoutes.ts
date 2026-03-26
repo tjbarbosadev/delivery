@@ -1,4 +1,5 @@
 import { UsersController } from '@/controllers/UsersController';
+import { verifyUserRole } from '@/middlewares/verifyUserRole';
 import { Router } from 'express';
 
 const usersRoutes = Router();
