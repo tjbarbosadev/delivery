@@ -22,7 +22,7 @@ class DeliveryLogsController {
       throw new AppError('The user can only view their own delivery logs', 401);
     }
 
-    res.json({ deliveryLogs: delivery?.logs || [] });
+    res.json({ delivery });
   }
 
   async create(req: Request, res: Response) {
@@ -42,10 +42,15 @@ class DeliveryLogsController {
     }
 
     if (delivery.status === 'pending') {
-      throw new AppError(
-        'Cannot add log to a pending delivery, change to in_progress',
-        400,
-      );
+      throw new AppError('Cannot add log to a pending delivery', 400);
+    }
+
+    if (delivery.status === 'canceled') {
+      throw new AppError('Cannot add log to a canceled delivery', 400);
+    }
+
+    if (delivery.status === 'delivered') {
+      throw new AppError('This order is already delivered', 400);
     }
 
     await prisma.deliveryLog.create({
