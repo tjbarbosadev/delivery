@@ -12,5 +12,6 @@ deliveriesRoutes.post(
   verifyUserRole(['sale']),
   deliveriesController.create,
 );
+deliveriesRoutes.get('/', ensureAuth, deliveriesController.index);
 
 export { deliveriesRoutes };
