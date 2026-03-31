@@ -10,7 +10,8 @@
     "dev": "tsx watch --env-file .env src/server.ts",
     "test:dev": "NODE_ENV=development NODE_OPTIONS=--experimental-vm-modules node --env-file=.env ./node_modules/jest/bin/jest.js --watchAll --runInBand",
     "test": "NODE_OPTIONS=--experimental-vm-modules node --env-file=.env ./node_modules/jest/bin/jest.js --runInBand --detectOpenHandles",
-    "build": "tsup src --format esm,cjs,iife --legacy-output --out-dir dist"
+    "build": "tsup src/server.ts --format esm --target node24 --platform node --out-dir dist --clean",
+    "start": "node --env-file=.env dist/server.js"
   },
   "repository": {
     "type": "git",
