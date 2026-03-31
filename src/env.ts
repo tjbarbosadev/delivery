@@ -1,7 +1,7 @@
 import z from 'zod';
 
 const envSchema = z.object({
-  PORT: z.string().transform((value) => parseInt(value, 10)),
+  PORT: z.coerce.number().default(3001),
   DATABASE_URL: z.string(),
   JWT_SECRET: z.string(),
 });
