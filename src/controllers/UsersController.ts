@@ -5,8 +5,17 @@ import { prisma } from '@/database/prisma';
 import { AppError } from '@/utils/AppError';
 
 class UsersController {
-  index(req: Request, res: Response) {
-    return res.json({ message: 'Users index' });
+  async index(req: Request, res: Response) {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    return res.json(users);
   }
 
   async create(req: Request, res: Response) {
@@ -38,7 +47,19 @@ class UsersController {
 
     const { password: _, ...userWithoutPassword } = user;
 
-    return res.status(201).json({ userWithoutPassword });
+    return res.status(201).json(userWithoutPassword);
+  }
+
+  async delete(req: Request, res: Response) {
+    const paramsSchema = z.object({
+      id: z.string().uuid(),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    await prisma.user.delete({ where: { id } });
+
+    return res.status(204).send('User deleted successfully');
   }
 }
 
